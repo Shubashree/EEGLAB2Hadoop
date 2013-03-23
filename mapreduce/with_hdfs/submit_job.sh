@@ -66,7 +66,6 @@ had jar /opt/hadoop/contrib/streaming/hadoop-*streaming*.jar \
 -D mapred.skip.attempts.to.start.skipping=4 \
 -D mapred.skip.mode.enabled=true \
 
-
 #Copy from HDFS to local
 subnumber=$(expr $(ls $local_output -p | grep "/"|wc -l) + 1)
 dirname=$local_output/out$subnumber

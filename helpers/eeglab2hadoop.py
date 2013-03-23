@@ -10,13 +10,14 @@ from numpy import array
 import os
 import sys
 import pickle
-from hadoop.io import Text
-from hadoop.io import SequenceFile
+
 import argparse
 import base64
 import gc
 import multiprocessing as mp
 import json
+
+from sequencefile.io import SequenceFile, Text
 
 NUMFOLDS = 5
 NUM_SAMPLES = 0
@@ -147,7 +148,7 @@ For instance: 'X:\RSVP\exp?\realtime\exp?_continuous_with_ica' with substitute =
 'X:\RSVP\exp44\realtime\exp44_continuous_with_ica.set' ... all the way to 60. The sequence files will be created in the outputpath and
 automatically uploaded to hdfs_target_path in the HDFS file system if those are specified. Assumes you are running this on the head node.
 """
-def compile_data(input_str, substitute, outputpath='', compression=False, test_file=False):
+def compile_data(input_str, substitute, outputpath='', compression=False, test_file=False, p=None):
     temp = input_str.rpartition(os.sep)
     path_temp = temp[0]
     file_temp = temp[2]
@@ -156,6 +157,10 @@ def compile_data(input_str, substitute, outputpath='', compression=False, test_f
         try:
             os.mkdir(outputpath)
         except: pass
+
+    if not p==None:
+        global pool
+        pool=p
 
     ica_key, ica_val, raw_key, raw_val = Text(), Text(), Text(), Text()
 

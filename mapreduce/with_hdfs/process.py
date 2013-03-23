@@ -3,8 +3,9 @@ Created on Mar 1, 2013
 
 @author: user
 '''
-##import helpers.eeglab2hadoop
-##from hadoop.io import SequenceFile, Text
+import helpers.eeglab2hadoop
+from sequencefile.io import SequenceFile, Text
+
 import numpy as np
 import multiprocessing as mp
 from numpy import ndarray, zeros, ones, concatenate, array, arange, ma, append
@@ -82,10 +83,15 @@ def cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, n
         sys.stderr.write(mes)
 
         test_idx = testmask[i]
-        rov_reg.append(regress_erp(y, test_idx, predictor, events,  ns)[0])
+        res = regress_erp(y, test_idx, predictor, events,  ns)[0]
+        rov = generate_stats(res)
+        rov_reg.append(rov)
 
     gc.enable()
     return rov_reg
+
+def generate_stats(res):
+    pass
 
 def cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_folds):
     gc.disable()
@@ -97,7 +103,9 @@ def cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_
         sys.stderr.write(mes)
 
         test_idx = testmask[i]
-        rov_av.append(average_erp(y, test_idx, events, ns)[0])
+        res = average_erp(y, test_idx, events, ns)[0]
+        rov = generate_stats(res)
+        rov_av.append(rov)
 
     gc.enable()
     return rov_av
@@ -281,16 +289,16 @@ def main():
     EPOCH_LENGTH=1.0
     NUM_FOLDS = 5
 
-    reader = SequenceFile.Reader('U:\\data\\RSVP\\hadoop_input\\exp54_continuous_with_ica.seq')
+    reader = SequenceFile.Reader('X:\\RSVP\\hadoop_input\\exp53_continuous_with_ica.seq')
     key_class = reader.getKeyClass()
     value_class = reader.getValueClass()
 
     key = key_class()
     value = value_class()
-    desired='X:\\RSVP\\hadoop\\exp53_continuous_with_ica.ica.45'
+    desired='X:\\RSVP\\hadoop_input\\exp53_continuous_with_ica.ica.1'
 
     while(1):
-        reader.next(key,value)
+        a = reader.next(key, value)
         if key._bytes==desired:
             break;
 
@@ -340,11 +348,11 @@ def main():
 ##    ts = time.time()
 ##    rov_av = cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_folds)
 ##    print 'main: averaging time = %f minutes' % ((time.time()-ts)/60.0)
-
-    ts = time.time() #Runtime ~ 3 min.
-    rov_av = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS)
-    print 'main: averaging time = %f minutes' % ((time.time()-ts)/60.0)
-    pass
+##
+##    ts = time.time() #Runtime ~ 3 min.
+##    rov_av = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS)
+##    print 'main: averaging time = %f minutes' % ((time.time()-ts)/60.0)
+##    pass
 
 if __name__ == "__main__":
-    mp.freeze_support
+    mp.freeze_support()
