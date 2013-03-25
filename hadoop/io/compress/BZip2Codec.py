@@ -16,25 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import gzip
+import bz2
 
-from sequencefile.io.InputStream import DataInputBuffer
-import StringIO
+from hadoop.io.InputStream import DataInputBuffer
 
-class GzipCodec:
+class BZip2Codec:
     def compress(self, data):
-        ioObj = StringIO.StringIO()
-        f = gzip.GzipFile(fileobj = ioObj, mode='wb')
-        f.write(data)
-        f.close()
-        return ioObj.getValue()
+        return bz2.compress(data)
 
     def decompress(self, data):
-        ioObj = StringIO.StringIO(data)
-        f = gzip.GzipFile(fileobj = ioObj, mode='rb')
-        d = f.read()
-        f.close()
-        return d
+        return bz2.decompress(data)
 
     def decompressInputStream(self, data):
-        return DataInputBuffer(self.decompress(data))
+        return DataInputBuffer(bz2.decompress(data))
+

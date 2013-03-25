@@ -16,17 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import bz2
+import zlib
 
-from sequencefile.io.InputStream import DataInputBuffer
+from hadoop.io.InputStream import DataInputBuffer
 
-class BZip2Codec:
+class ZlibCodec:
     def compress(self, data):
-        return bz2.compress(data)
+        return zlib.compress(data)
 
     def decompress(self, data):
-        return bz2.decompress(data)
+        return zlib.decompress(data)
 
     def decompressInputStream(self, data):
-        return DataInputBuffer(bz2.decompress(data))
+        return DataInputBuffer(zlib.decompress(data))
+
+DefaultCodec = ZlibCodec
 

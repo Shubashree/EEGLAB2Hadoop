@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sequencefile.io import *
+from hadoop.io import *
 
 def hadoopClassFromName(class_path):
     if class_path.startswith('org.apache.hadoop.'):

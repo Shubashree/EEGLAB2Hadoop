@@ -21,7 +21,7 @@ from uuid import uuid1
 from time import time
 import os
 
-from sequencefile.util.ReflectionUtils import hadoopClassFromName, hadoopClassName
+from hadoop.util.ReflectionUtils import hadoopClassFromName, hadoopClassName
 
 from compress import CodecPool
 

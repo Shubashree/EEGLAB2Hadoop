@@ -16,19 +16,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import zlib
+from hadoop.util import ReflectionUtils
 
-from sequencefile.io.InputStream import DataInputBuffer
+from BZip2Codec import *
+from ZlibCodec import *
+from GzipCodec import *
 
-class ZlibCodec:
-    def compress(self, data):
-        return zlib.compress(data)
+class CodecPool(object):
+    def __new__(cls, *p, **k):
+        if not '_shared_instance' in cls.__dict__:
+            cls._shared_instance = object.__new__(cls)
+        return cls._shared_instance
 
-    def decompress(self, data):
-        return zlib.decompress(data)
+    def getDecompressor(self, class_path=None):
+        if not class_path:
+            return DefaultCodec()
+        codec_class = ReflectionUtils.hadoopClassFromName(class_path)
+        return codec_class()
 
-    def decompressInputStream(self, data):
-        return DataInputBuffer(zlib.decompress(data))
-
-DefaultCodec = ZlibCodec
+    def getCompressor(self, class_path=None):
+        if not class_path:
+            return DefaultCodec()
+        codec_class = ReflectionUtils.hadoopClassFromName(class_path)
+        return codec_class()
 
