@@ -15,180 +15,180 @@ Name=PyEEGLab
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFolderNode
-Name=helpers
+Name=hadoop
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]helpers\__init__.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]helpers\e2p_driver.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]helpers\e2p_driver.sh
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]helpers\eeglab2hadoop.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]helpers\float_open.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
-Count=5
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
-ClassName=TProjectFolderNode
-Name=mapreduce
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
-ClassName=TProjectFolderNode
-Name=with_hdfs
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node0]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]mapreduce\with_hdfs\mapper.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]mapreduce\with_hdfs\process.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node2]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]mapreduce\with_hdfs\reducer.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes\Node3]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]mapreduce\with_hdfs\submit_job.sh
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0\ChildNodes]
-Count=4
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]mapreduce\__init__.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
-Count=2
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
-ClassName=TProjectFolderNode
-Name=sequencefile
-
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0]
 ClassName=TProjectFolderNode
 Name=io
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFolderNode
 Name=compress
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\compress\__init__.py
+FileName=$[Project-Path]hadoop\io\compress\__init__.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\compress\BZip2Codec.py
+FileName=$[Project-Path]hadoop\io\compress\BZip2Codec.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\compress\CodecPool.py
+FileName=$[Project-Path]hadoop\io\compress\CodecPool.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\compress\GzipCodec.py
+FileName=$[Project-Path]hadoop\io\compress\GzipCodec.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\compress\ZlibCodec.py
+FileName=$[Project-Path]hadoop\io\compress\ZlibCodec.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
 Count=5
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\__init__.py
+FileName=$[Project-Path]hadoop\io\__init__.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\ArrayFile.py
+FileName=$[Project-Path]hadoop\io\ArrayFile.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node3]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\FloatWritable.py
+FileName=$[Project-Path]hadoop\io\FloatWritable.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node4]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\InputStream.py
+FileName=$[Project-Path]hadoop\io\InputStream.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node5]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\IntWritable.py
+FileName=$[Project-Path]hadoop\io\IntWritable.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node6]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\MapFile.py
+FileName=$[Project-Path]hadoop\io\MapFile.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node7]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node7]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\NullWritable.py
+FileName=$[Project-Path]hadoop\io\NullWritable.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node8]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\OutputStream.py
+FileName=$[Project-Path]hadoop\io\OutputStream.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node9]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\SequenceFile.py
+FileName=$[Project-Path]hadoop\io\SequenceFile.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node10]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node10]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\SetFile.py
+FileName=$[Project-Path]hadoop\io\SetFile.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node11]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node11]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\Text.py
+FileName=$[Project-Path]hadoop\io\Text.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node12]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node12]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\VersionMismatchException.py
+FileName=$[Project-Path]hadoop\io\VersionMismatchException.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node13]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node13]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\Writable.py
+FileName=$[Project-Path]hadoop\io\Writable.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node14]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node14]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\io\WritableUtils.py
+FileName=$[Project-Path]hadoop\io\WritableUtils.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
 Count=15
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFolderNode
 Name=util
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1\ChildNodes\Node0]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\util\__init__.py
+FileName=$[Project-Path]hadoop\util\__init__.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1\ChildNodes\Node1]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\util\ReflectionUtils.py
+FileName=$[Project-Path]hadoop\util\ReflectionUtils.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1\ChildNodes]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
 Count=2
 
-[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node2]
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]sequencefile\__init__.py
+FileName=$[Project-Path]hadoop\__init__.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node0\ChildNodes]
+Count=3
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1]
+ClassName=TProjectFolderNode
+Name=helpers
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]helpers\__init__.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]helpers\e2p_driver.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]helpers\e2p_driver.sh
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]helpers\eeglab2hadoop.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes\Node4]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]helpers\float_open.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node1\ChildNodes]
+Count=5
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2]
+ClassName=TProjectFolderNode
+Name=mapreduce
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0]
+ClassName=TProjectFolderNode
+Name=with_hdfs
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node0]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]mapreduce\with_hdfs\mapper.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]mapreduce\with_hdfs\process.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node2]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]mapreduce\with_hdfs\reducer.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes\Node3]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]mapreduce\with_hdfs\submit_job.sh
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node0\ChildNodes]
+Count=4
+
+[Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes\Node1]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]mapreduce\__init__.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node2\ChildNodes]
-Count=3
+Count=2
 
 [Project\ChildNodes\Node0\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode

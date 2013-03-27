@@ -3,14 +3,12 @@ Created on Mar 1, 2013
 
 @author: user
 '''
-import helpers.eeglab2hadoop
-from sequencefile.io import SequenceFile, Text
-
 import numpy as np
 import multiprocessing as mp
 from numpy import ndarray, zeros, ones, concatenate, array, arange, ma, append
 import scipy as sp
 from scipy import ceil,floor, io, stats, var
+from scipy.io import loadmat, savemat
 import os
 import pickle
 import math
@@ -23,12 +21,12 @@ import time
 import base64
 import gc
 
-def process(y, eeg, epoch_length, epoch_offset, num_folds):
+def process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS, p=None):
     sr = eeg['sample_rate']
     events = eeg['events']
     event_types = events['uniqueLabel']
 
-    ns = int(ceil(epoch_length*sr))
+    ns = int(ceil(EPOCH_LENGTH*sr))
 
     #Identify artifacts
     artifact_indexes = zeros((y.shape[0],1))
@@ -36,15 +34,28 @@ def process(y, eeg, epoch_length, epoch_offset, num_folds):
     num_occurances, events = remove_corrupted_events(event_types, events, artifact_indexes, ns)
 
     #Shift signal to account for negative response
-    zpadpre=zeros((int(ceil(epoch_offset*sr)), 1))
-    zpadpost=zeros((int(ceil((epoch_length-epoch_offset)*sr)), 1))
+    zpadpre=zeros((int(ceil(EPOCH_OFFSET*sr)), 1))
+    zpadpost=zeros((int(ceil((EPOCH_LENGTH-EPOCH_OFFSET)*sr)), 1))
     y = concatenate((zpadpre, y, zpadpost))
     artifact_indexes = concatenate((zpadpre, artifact_indexes, zpadpost))
 
-    reduction_variance_reg = cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, num_folds);
-    reduction_variance_av = cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_folds);
+    result = np.empty((2, NUM_FOLDS, len(event_types), 2))
+    if not p==None:
 
-    return (reduction_variance_reg, reduction_variance_av)
+        reg_parent_conn, reg_child_conn = mp.Pipe()
+        av_parent_conn, av_child_conn = mp.Pipe()
+        these_args = (y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS,)
+        res_reg = p.apply_async(cross_validate_regression, these_args)
+        res_av = p.apply_async(cross_validate_average, these_args)
+
+        result[0,:,:,:]=res_av.get()
+        result[1,:,:,:]=res_reg.get()
+
+    else:
+        result[0,:,:,:] = cross_validate_average(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS);
+        result[1,:,:,:] = cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS);
+
+    return result
 
 def remove_corrupted_events(event_types, events, artifact_indexes, ns):
     count=0
@@ -69,53 +80,48 @@ def remove_corrupted_events(event_types, events, artifact_indexes, ns):
 
     return num_occurances, events
 
-def cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, num_folds):
+def cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS):
     gc.disable()
-    testmask = extract_folds(y, num_folds)
 
     mes = 'process.cross_validate_regression: generating predictor\n'
     sys.stderr.write(mes)
     predictor = predictor_gen(events, ns, num_occurances, y.shape[0])
 
-    rov_reg=[]
-    for i in arange(num_folds):
+    rov_reg= np.empty((NUM_FOLDS, len(num_occurances), 2))
+    testmask = extract_folds(y, NUM_FOLDS)
+    for i in arange(NUM_FOLDS):
         mes = 'process.cross_validate_regression: processing fold %d\n' % (i+1)
         sys.stderr.write(mes)
 
         test_idx = testmask[i]
         res = regress_erp(y, test_idx, predictor, events,  ns)[0]
-        rov = generate_stats(res)
-        rov_reg.append(rov)
+        rov_reg[i,:,:]=res
 
     gc.enable()
     return rov_reg
 
-def generate_stats(res):
-    pass
-
-def cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_folds):
+def cross_validate_average(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS):
     gc.disable()
-    testmask = extract_folds(y, num_folds)
 
-    rov_av=[]
-    for i in arange(num_folds):
+    rov_av= np.empty((NUM_FOLDS, len(num_occurances), 2))
+    testmask = extract_folds(y, NUM_FOLDS)
+    for i in arange(NUM_FOLDS):
         mes = 'process.cross_validate_average: processing fold %d\n' % (i+1)
         sys.stderr.write(mes)
 
         test_idx = testmask[i]
         res = average_erp(y, test_idx, events, ns)[0]
-        rov = generate_stats(res)
-        rov_av.append(rov)
+        rov_av[i,:,:]=res
 
     gc.enable()
     return rov_av
 
-def extract_folds(y, num_folds):
+def extract_folds(y, NUM_FOLDS):
     dlength = y.shape[0]
-    split_length = int(floor(dlength/num_folds))
+    split_length = int(floor(dlength/NUM_FOLDS))
     testmask= []
 
-    for i in arange(0, num_folds):
+    for i in arange(0, NUM_FOLDS):
         start_idx = split_length*i
         end_idx = split_length*(i+1)
         this_mask = zeros(dlength, dtype=bool)
@@ -127,7 +133,7 @@ def extract_folds(y, num_folds):
 def predictor_gen(events, ns, num_occurances, dlength):
     gc.disable()
     event_types = events['uniqueLabel']
-    matsize = dlength, len(event_types)*ns
+    matsize = dlength, int(len(event_types)*ns)
 
     ii = np.empty(0, dtype=np.int)
     jj = np.empty(0, dtype=np.int)
@@ -161,7 +167,6 @@ def predictor_gen(events, ns, num_occurances, dlength):
     return retval
 
 def regress_erp(y, test_idx, predictor, events,  ns):
-
     event_types = events['uniqueLabel']
     labels = events['label']
     latencies = events['latencyInFrame']
@@ -195,7 +200,7 @@ def regress_erp(y, test_idx, predictor, events,  ns):
     events_to_test = np.where((array(latencies)<tst_end_idx) & (array(latencies)>tst_start_idx))[0]
     gc.disable()
     #Compute performance stats
-    stats = []
+    stats = np.empty((len(event_types),2))
     for i, this_type in enumerate(event_types):
         this_stat = np.empty((0,2))
         for j, event_idx in enumerate(events_to_test):
@@ -208,10 +213,12 @@ def regress_erp(y, test_idx, predictor, events,  ns):
                 noiseblock = noise[start_idx:end_idx]
                 this_stat = np.append(this_stat, array([[sp.var(yblock)], [sp.var(noiseblock)]]).T, axis=0)
 
-        stats.append(this_stat)
+        rov_raw = this_stat[:,0]-this_stat[:,1]
+        rov_nor = rov_raw/this_stat[:,0]
+        rov = array([sp.mean(rov_raw), sp.mean(rov_nor)])
+        stats[i,:] =  rov
 
     gc.enable()
-
     return stats, np.reshape(array(rerp_vec),(-1, ns)).T
 
 def average_erp(y, test_idx, events, ns):
@@ -262,7 +269,7 @@ def average_erp(y, test_idx, events, ns):
         aerp_vec[:,i] = np.mean(yblock,axis=1)
 
     #Calc stats
-    stats = []
+    stats = np.empty((len(event_types),2))
     for i, this_type in enumerate(event_types):
         this_stat = np.empty((0,2))
         for j, event_idx in enumerate(events_to_test):
@@ -276,12 +283,20 @@ def average_erp(y, test_idx, events, ns):
                 noiseblock = yblock - aerp_vec[block_range,i]
                 this_stat = np.append(this_stat, array([[sp.var(yblock)], [sp.var(noiseblock)]]).T, axis=0)
 
-        stats.append(this_stat)
+        rov_raw = this_stat[:,0]-this_stat[:,1]
+        rov_nor = rov_raw/this_stat[:,0]
+        rov = array([sp.mean(rov_raw), sp.mean(rov_nor)])
+        stats[i,:] =  rov
 
     gc.enable()
     return stats, aerp_vec
 
 def main():
+    from mapreduce.with_hdfs.process import *
+    import helpers.eeglab2hadoop
+    from hadoop.io import SequenceFile, Text
+
+    p=mp.Pool()
     clean_indexes = io.loadmat('C:\\Users\\user\\Google Drive\\SCCN\\ERP Regression Project\\clean_indexes.mat')['clean_indexes']
     ai = np.logical_not(clean_indexes)
 
@@ -309,7 +324,7 @@ def main():
 
     events = eeg['events']
     event_types = events['uniqueLabel']
-    epoch_length = 1
+    EPOCH_LENGTH = 1
     ns = EPOCH_LENGTH*eeg['sample_rate']
 
     artifact_indexes = zeros((y.shape[0],1))
@@ -323,12 +338,14 @@ def main():
     #Convert to masked array
     ytrain = np.ma.array(y,mask=np.logical_not(ones(y.shape[0])))
     num_occurances, events = remove_corrupted_events(event_types, events, artifact_indexes, ns)
+    dlength = ytrain.shape[0]
 
 ##    ts = time.time()
 ##    print 'generating predictor'
-##    predictor = predictor_gen(events, event_types, ns, num_occurances, ytrain.shape[0])
+##    predictor = predictor_gen(events, ns, num_occurances, dlength)
 ##    print 'predictor time = %f minutes' % ((time.time()-ts)/60.0)
 ##    print 'predictor dimension = ' + str(predictor.size)
+##
 ##
 ##    ts = time.time()
 ##    print 'starting regression'
@@ -341,18 +358,19 @@ def main():
 ##    print 'averaging time = %f minutes' % ((time.time()-ts)/60.0)
 ##
 ##
+##
 ##    ts = time.time()
-##    rov_reg = cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, num_folds)
+##    rov_reg = cross_validate_regression(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS)
 ##    print 'main: regression time = %f minutes' % ((time.time()-ts)/60.0)
 ##
 ##    ts = time.time()
-##    rov_av = cross_validate_average(y, events, artifact_indexes, ns, num_occurances, num_folds)
+##    rov_av = cross_validate_average(y, events, artifact_indexes, ns, num_occurances, NUM_FOLDS)
 ##    print 'main: averaging time = %f minutes' % ((time.time()-ts)/60.0)
-##
-##    ts = time.time() #Runtime ~ 3 min.
-##    rov_av = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS)
-##    print 'main: averaging time = %f minutes' % ((time.time()-ts)/60.0)
-##    pass
+
+    ts = time.time() #Runtime ~ 3 min.
+    rov = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS, p)
+    print 'main: processing time = %f minutes' % ((time.time()-ts)/60.0)
+    pass
 
 if __name__ == "__main__":
     mp.freeze_support()

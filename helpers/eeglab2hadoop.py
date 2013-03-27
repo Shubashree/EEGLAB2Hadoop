@@ -2,7 +2,8 @@
 # Copyright (C) 2012 Matthew Burns  <mdburns@ucsd.edu>
 
 from datetime import datetime
-import float_open as fop
+import helpers
+import helpers.float_open as fop
 from scipy import stats, zeros, ones, signal
 from scipy.io import loadmat, savemat
 import numpy as np
@@ -10,14 +11,12 @@ from numpy import array
 import os
 import sys
 import pickle
-
 import argparse
 import base64
 import gc
 import multiprocessing as mp
-import json
 
-from sequencefile.io import SequenceFile, Text
+from hadoop.io import SequenceFile, Text
 
 NUMFOLDS = 5
 NUM_SAMPLES = 0
@@ -269,25 +268,26 @@ def create_file_manifest(input_str, substitute, outputpath=''):
         path_to_data = path_temp.replace('?', str(v))
         filename = file_temp.replace('?', str(v))
 
-def hadoop2mat(dir):
+def hadoop2mat(directory):
     result={}
-    for fl in os.listdir(dir):
+    for fl in os.listdir(directory):
         if fl.split('-')[0]=='part':
-            current = os.path.join(dir, fl)
+            current = os.path.join(directory, fl)
             print current
             if os.path.isfile(current):
-                f = open(current)
-                valstr = f.read()
-                val = pickle.loads(base64.b64decode(valstr))
-                key = val['path']
-                rpath, name = key.rsplit(os.sep)
-                ica = val['ica']
-                raw = val['raw']
-                result[name] = (ica, raw)
+                f = open(current, 'rb')
+                result_str = f.read().strip('\n')
+                f.close()
+                if not result_str=='':
+                    experiments = result_str.split('\n')
+                    kvps = [exp.split('\t') for exp in experiments]
+                    for kvp in kvps:
+                        this_result = pickle.loads(base64.b64decode(kvp[1]))
+                        path, name = kvp[0].rsplit('/', 1)
+                        print name
+                        result[name]=this_result
 
-    fp = open(dir+os.sep+'result.json', 'w')
-    json.dump(result, fp)
-    fp.close()
+    savemat(directory+os.sep+'result.mat', result)
 
 def main():
     parser = argparse.ArgumentParser(description='Recompile EEGLAB files into sequence files for Hadoop')
@@ -331,7 +331,7 @@ def main():
 
     #Puts the files created by hadoop into a JSON string for Matlab
     if theseargs.hadoop2mat:
-        print 'eeglab2hadoop: consolidating hadoop parts into result.json'
+        print 'eeglab2hadoop: consolidating hadoop parts into result.mat'
         hadoop2mat(theseargs.file_str)
 
     c=datetime.now()-ts

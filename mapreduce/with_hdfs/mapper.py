@@ -3,12 +3,16 @@ import sys
 import pickle
 import base64
 from process import process
+import multiprocessing as mp
 
-##import multiprocessing
-##from multiprocessing import Pool
 EPOCH_LENGTH=.875
 EPOCH_OFFSET=.125
 NUM_FOLDS=5
+
+if __name__ == "__main__":
+    mp.freeze_support()
+
+p= mp.Pool(2)
 
 for instr in sys.stdin:
     this_key=''
@@ -27,8 +31,9 @@ for instr in sys.stdin:
     eeg = pickle.loads(v[1])
 
     try:
-        reduction_variance_reg, reduction_variance_av = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS)
-        result = {'id':this_id, 'rov_av':reduction_variance_av, 'rov_reg':reduction_variance_reg }
+        rov = process(y, eeg, EPOCH_LENGTH, EPOCH_OFFSET, NUM_FOLDS, p)
+        result = {'id':this_id, 'rov':rov }
+
     except:
         sys.stderr.write('mapper: process failed\n')
         continue
@@ -38,4 +43,5 @@ for instr in sys.stdin:
     if this_key != '':
         print '%s\t%s' % (this_key, this_val)
 
+p.close()
 sys.stderr.write('mapper:  good job\n')
